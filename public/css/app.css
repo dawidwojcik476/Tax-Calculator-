@@ -1,0 +1,64 @@
+.tax-form {
+  max-width: 600px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  padding: 0px 20px;
+  padding: 0px 20px; }
+  .tax-form__result {
+    margin-top: 20px; }
+  .tax-form form {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center; }
+  .tax-form .submit {
+    background: black;
+    color: white;
+    border-radius: 10px;
+    border: 0px;
+    padding: 10px 15px;
+    margin-top: 20px; }
+  .tax-form div {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    width: 100%; }
+    .tax-form div input,
+    .tax-form div select {
+      background-color: #fff;
+      border: 1px solid #dfdfdf;
+      border-radius: 4px;
+      color: #1b171e;
+      font-size: 0.9375rem;
+      height: 2.75rem;
+      line-height: 1.2;
+      padding: 0.5rem 1rem;
+      width: 100%; }
+    .tax-form div label {
+      margin-top: 20px; }
+  .tax-form .error {
+    color: red; }

@@ -1,0 +1,54 @@
+
+.tax-form {
+    max-width: 600px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0px 20px;
+
+    &__result {
+        margin-top:20px;
+    }
+form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+}
+    .submit {
+        background: black;
+        color: white;
+        border-radius: 10px;
+        border: 0px;
+        padding: 10px 15px;
+        margin-top: 20px;
+    }
+    padding: 0px 20px;
+
+    div {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        input,
+        select {
+            background-color: #fff;
+            border: 1px solid #dfdfdf;
+            border-radius: 4px;
+            color: #1b171e;
+            font-size: 0.9375rem;
+            height: 2.75rem;
+            line-height: 1.2;
+            padding: 0.5rem 1rem;
+            width: 100%;
+        }
+        label {
+            margin-top: 20px;
+        }
+    }
+
+    .error {
+        color:red;
+    }
+}
