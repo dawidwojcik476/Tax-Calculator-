@@ -27,6 +27,9 @@ function tax_calculator()
 add_shortcode('taxcalculator', 'tax_calculator');
 
 function calculator_post_type() {
+    
+            require_once ('acf-fields.php');
+    
             register_post_type( 'calc', array(
                 'label'               => __( 'Produkty Kalkulatora', 'textdomain' ),
                 'public'              => true,
