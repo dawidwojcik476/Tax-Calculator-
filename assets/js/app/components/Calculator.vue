@@ -21,8 +21,7 @@
           min="1"
           name="netto"
           id="netto"
-          required
-          v-model="netto"
+          v-model.number="netto"
           placeholder="Kwota netto"
         />
         <div class="error" v-if="nettoError">{{ nettoError }}</div>
@@ -93,6 +92,7 @@ export default {
       currency: "",
       vatchoice: "",
       taxresult: "",
+      taxNumber: "",
       flag: false,
     };
   },
@@ -100,8 +100,18 @@ export default {
   methods: {
     handleSubmit() {
       this.productnameError =
-      this.productname.length > 1 ? "" : "Uzupełnij polę";
-      this.nettoError = this.netto.length > 1 ? "" : "Uzupełnij polę";g
+        this.productname.length > 1 ? "" : "Uzupełnij polę";
+      if (
+        this.netto.length < 1 ||
+        this.netto == "NaN PLN" ||
+        this.netto == "NaN EURO"
+      ) {
+        this.nettoError = "Uzupełnij polę";
+      } else if (this.netto < 1) {
+        this.nettoError = "Wartość produktu musi być dodatnia";
+      } else {
+        this.nettoError = "";
+      }
       this.currencyError = this.currency.length > 1 ? "" : "Uzupełnij polę";
       this.vatchoiceError = this.vatchoice.length > 1 ? "" : "Uzupełnij polę";
 
@@ -122,9 +132,11 @@ export default {
       }
     },
     calculateTax() {
-      this.taxresult = +this.netto * +this.vatchoice;
+      this.taxNumber = this.vatchoice.match(/(\d+)/);
+      this.taxresult = +this.netto * (+this.taxNumber[0] * 0.01);
       this.brutto = +this.netto + +this.taxresult;
     },
   },
 };
 </script>
+
