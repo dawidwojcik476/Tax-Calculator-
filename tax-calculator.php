@@ -21,39 +21,12 @@ add_action('wp_enqueue_scripts', 'plugin_js');
 
 function tax_calculator()
 {
-require_once '/tax-calculator.html';
+    require 'tax-calculator.html';
 }; 
 
 add_shortcode('taxcalculator', 'tax_calculator');
 
 function calculator_post_type() {
-    register_taxonomy( 'calc_netto', ['calc'], array(
-                'label'         => 'Kwota Netto',
-                'show_admin_column' => true,
-                'publicly_queryable' => false,
-                'show_in_nav_menus' => false,
-                'rewrite'             => false,
-                'show_tagcloud' => false,
-                'hierarchical'  => false
-            ) );
-            register_taxonomy( 'calc_brutto', ['calc'], array(
-                'label'         => 'Kwota Brutto',
-                'show_admin_column' => true,
-                'publicly_queryable' => false,
-                'show_in_nav_menus' => false,
-                'rewrite'             => false,
-                'show_tagcloud' => false,
-                'hierarchical'  => false
-            ) );
-            register_taxonomy( 'calc_taxresult', ['calc'], array(
-                'label'         => 'Kwota Podatku',
-                'show_admin_column' => true,
-                'publicly_queryable' => false,
-                'show_in_nav_menus' => false,
-                'rewrite'             => false,
-                'show_tagcloud' => false,
-                'hierarchical'  => false
-            ) );
             register_post_type( 'calc', array(
                 'label'               => __( 'Produkty Kalkulatora', 'textdomain' ),
                 'public'              => true,
@@ -70,7 +43,6 @@ function calculator_post_type() {
                 'taxonomies'          => array( 'calc_netto', 'calc_brutto', 'calc_taxresult' ),
                 'menu_position' => 20
             ));
-        
 }
 
 add_action('init', 'calculator_post_type');
@@ -79,20 +51,35 @@ function create_post() {
     $curPageName = substr($_SERVER["SCRIPT_NAME"],strrpos($_SERVER["SCRIPT_NAME"],"/")+1);  
 
     if(isset($_POST['productname'])){
-        $my_post = array(
-                'post_type' => 'calc',
-                'post_title' => $_POST['productname'],
-                'post_calc_netto' => $_POST['netto'],
-                'post_status' => 'publish',    
-            );
-       $calc_post = wp_insert_post($my_post);
-        wp_set_object_terms($calc_post, $_POST['netto'], 'calc_netto', false );
-        wp_set_object_terms($calc_post, $_POST['brutto'], 'calc_brutto', false );
-        wp_set_object_terms($calc_post, $_POST['taxresult'], 'calc_taxresult', false );
-    
+        $post_data = array(
+            'post_title'    => $_POST['productname'],
+            'post_type'     => 'calc',
+            'post_status'   => 'publish'
+        );
+
+        $post_id = wp_insert_post( $post_data );
+
+        $field_key = "field_613f3e3375e01";
+        $value = $_POST['productname'];
+        update_field( $field_key, $value, $post_id );
+
+        $field_key = "field_613f3e9d75e05";
+        $value = $_POST['brutto'];
+        update_field( $field_key, $value, $post_id );
+
+        $field_key = "field_613f3e9d75e04";
+        $value = $_POST['taxresult'];
+        update_field( $field_key, $value, $post_id );
+
+        $field_key = "field_613f3e7675e02";
+        $value = $_POST['brutto'] - $_POST['taxresult'];
+        update_field( $field_key, $value, $post_id );
+
         wp_redirect($curPageName);
         
         exit();      
     }
 }
 add_action('init','create_post');
+
+
