@@ -62,58 +62,76 @@ webpackJsonp([0],[
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["a"] = ({
   data() {
     return {
-      productname: '',
-      productnameError: '',
-      netto: '',
-      nettoResult: '',
-      brutto: '',
-      currency: '',
-      vatchoice: '',
-      taxresult: '',
+      productname: "",
+      productnameError: "",
+      nettoError: "",
+      currencyError: "",
+      vatchoiceError: "",
+      netto: "",
+      nettoResult: "",
+      brutto: "",
+      currency: "",
+      vatchoice: "",
+      taxresult: "",
+      taxNumber: "",
       flag: false
-
     };
   },
   mounted() {},
   methods: {
     handleSubmit() {
-      this.productnameError = this.productname.length > 1 ? '' : 'Uzupełnij polę';
-      this.nettoError = this.netto.length > 1 ? '' : 'Uzupełnij polę';
-      this.currencyError = this.currency.length > 1 ? '' : 'Uzupełnij polę';
-      this.vatchoiceError = this.vatchoice.length > 1 ? '' : 'Uzupełnij polę';
+      this.productnameError = this.productname.length > 1 ? "" : "Uzupełnij polę";
+      if (this.netto.length < 1 || this.netto == "NaN PLN" || this.netto == "NaN EURO") {
+        this.nettoError = "Uzupełnij polę";
+      } else if (this.netto < 1) {
+        this.nettoError = "Wartość produktu musi być dodatnia";
+      } else {
+        this.nettoError = "";
+      }
+      this.currencyError = this.currency.length > 1 ? "" : "Uzupełnij polę";
+      this.vatchoiceError = this.vatchoice.length > 1 ? "" : "Uzupełnij polę";
 
       if (!this.productnameError && !this.nettoError && !this.currencyError && !this.vatchoices) {
         this.calculateTax();
-        this.brutto = Number(this.brutto).toFixed(2) + ' ' + this.currency;
-        this.netto = Number(this.netto).toFixed(2) + ' ' + this.currency;
+        this.brutto = Number(this.brutto).toFixed(2) + " " + this.currency;
+        this.netto = Number(this.netto).toFixed(2) + " " + this.currency;
         this.nettoResult = this.netto;
-        this.taxresult = Number(this.taxresult).toFixed(2) + ' ' + this.currency;
+        this.taxresult = Number(this.taxresult).toFixed(2) + " " + this.currency;
         this.flag = true;
+        this.netto = "";
       }
     },
     calculateTax() {
-      if (this.vatchoice == '23%') {
-        this.taxresult = this.netto * 0.23;
-        this.brutto = +this.netto + +this.taxresult;
-      } else if (this.vatchoice == '22%') {
-        this.taxresult = this.netto * 0.22;
-        this.brutto = +this.netto + +this.taxresult;
-      } else if (this.vatchoice == '8%') {
-        this.taxresult = this.netto * 0.08;
-        this.brutto = +this.netto + +this.taxresult;
-      } else if (this.vatchoice == '7%') {
-        this.taxresult = this.netto * 0.07;
-        this.brutto = +this.netto + +this.taxresult;
-      } else if (this.vatchoice == '5%') {
-        this.taxresult = this.netto * 0.05;
-        this.brutto = +this.netto + +this.taxresult;
-      } else if (this.vatchoice == '0%') {
-        this.brutto = this.netto;
-      }
+      this.taxNumber = this.vatchoice.match(/(\d+)/);
+      this.taxresult = +this.netto * (+this.taxNumber[0] * 0.01);
+      this.brutto = +this.netto + +this.taxresult;
     }
   }
 });
@@ -351,7 +369,7 @@ var render = function() {
         _vm._v(" "),
         _vm.productnameError
           ? _c("div", { staticClass: "error" }, [
-              _vm._v(" " + _vm._s(_vm.productnameError))
+              _vm._v(_vm._s(_vm.productnameError))
             ])
           : _vm._e()
       ]),
@@ -363,16 +381,17 @@ var render = function() {
           directives: [
             {
               name: "model",
-              rawName: "v-model",
+              rawName: "v-model.number",
               value: _vm.netto,
-              expression: "netto"
+              expression: "netto",
+              modifiers: { number: true }
             }
           ],
           attrs: {
-            tpye: "text",
+            type: "number",
+            min: "1",
             name: "netto",
             id: "netto",
-            required: "",
             placeholder: "Kwota netto"
           },
           domProps: { value: _vm.netto },
@@ -381,14 +400,17 @@ var render = function() {
               if ($event.target.composing) {
                 return
               }
-              _vm.netto = $event.target.value
+              _vm.netto = _vm._n($event.target.value)
+            },
+            blur: function($event) {
+              return _vm.$forceUpdate()
             }
           }
         }),
         _vm._v(" "),
         _vm.nettoError
           ? _c("div", { staticClass: "error" }, [
-              _vm._v(" " + _vm._s(_vm.nettoError))
+              _vm._v(_vm._s(_vm.nettoError))
             ])
           : _vm._e()
       ]),
@@ -451,7 +473,7 @@ var render = function() {
         _vm._v(" "),
         _vm.currencyError
           ? _c("div", { staticClass: "error" }, [
-              _vm._v(" " + _vm._s(_vm.currencyError))
+              _vm._v(_vm._s(_vm.currencyError))
             ])
           : _vm._e()
       ]),
@@ -495,47 +517,23 @@ var render = function() {
             }
           },
           [
-            _c(
-              "option",
-              { staticClass: "vat-choice__first", attrs: { value: "23%" } },
-              [_vm._v("23%")]
-            ),
+            _c("option", { attrs: { value: "23%" } }, [_vm._v("23%")]),
             _vm._v(" "),
-            _c(
-              "option",
-              { staticClass: "vat-choice__second", attrs: { value: "22%" } },
-              [_vm._v("22%")]
-            ),
+            _c("option", { attrs: { value: "22%" } }, [_vm._v("22%")]),
             _vm._v(" "),
-            _c(
-              "option",
-              { staticClass: "vat-choice__third", attrs: { value: "8%" } },
-              [_vm._v("8%")]
-            ),
+            _c("option", { attrs: { value: "8%" } }, [_vm._v("8%")]),
             _vm._v(" "),
-            _c(
-              "option",
-              { staticClass: "vat-choice__fourth", attrs: { value: "7%" } },
-              [_vm._v("7%")]
-            ),
+            _c("option", { attrs: { value: "7%" } }, [_vm._v("7%")]),
             _vm._v(" "),
-            _c(
-              "option",
-              { staticClass: "vat-choice__fifth", attrs: { value: "5%" } },
-              [_vm._v("5%")]
-            ),
+            _c("option", { attrs: { value: "5%" } }, [_vm._v("5%")]),
             _vm._v(" "),
-            _c(
-              "option",
-              { attrs: { classs: "vat-choice__sixth", value: "0%" } },
-              [_vm._v("0%")]
-            )
+            _c("option", { attrs: { value: "0%" } }, [_vm._v("0%")])
           ]
         ),
         _vm._v(" "),
         _vm.vatchoiceError
           ? _c("div", { staticClass: "error" }, [
-              _vm._v(" " + _vm._s(_vm.productnameError))
+              _vm._v(_vm._s(_vm.productnameError))
             ])
           : _vm._e()
       ]),
@@ -549,8 +547,7 @@ var render = function() {
             expression: "brutto"
           }
         ],
-        staticStyle: { display: "none" },
-        attrs: { name: "brutto" },
+        attrs: { name: "brutto", type: "hidden" },
         domProps: { value: _vm.brutto },
         on: {
           input: function($event) {
@@ -571,8 +568,7 @@ var render = function() {
             expression: "taxresult"
           }
         ],
-        staticStyle: { display: "none" },
-        attrs: { name: "taxresult" },
+        attrs: { name: "taxresult", type: "hidden" },
         domProps: { value: _vm.taxresult },
         on: {
           input: function($event) {
@@ -598,14 +594,14 @@ var render = function() {
     _vm._v(" "),
     _vm.flag == true
       ? _c("div", { staticClass: "tax-form__result" }, [
-          _vm._v("Cena produktu brutto wynosi: "),
+          _vm._v("\n    Cena produktu brutto wynosi: "),
           _c("b", [_vm._v(" " + _vm._s(_vm.brutto) + " ")]),
           _vm._v(" "),
           _c("br"),
-          _vm._v(" Cena produktu netto wynosi: "),
-          _c("b", [_vm._v(" " + _vm._s(_vm.nettoResult) + "  ")]),
+          _vm._v("\n    Cena produktu netto wynosi: "),
+          _c("b", [_vm._v(" " + _vm._s(_vm.nettoResult) + " ")]),
           _c("br"),
-          _vm._v(" Kwota podatku wynosi "),
+          _vm._v("\n    Kwota podatku wynosi "),
           _c("b", [_vm._v(" " + _vm._s(_vm.taxresult) + " ")]),
           _c("br")
         ])
